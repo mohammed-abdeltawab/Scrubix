@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SCRUBIX — المنتجات</title>
+<link rel="icon" href="img/logo.png">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container header-inner">
+    <a href="index.html" class="logo brand-logo"><img src="img/logo.png" alt="SCRUBIX" class="brand-mark">SCRUBIX</a>
+    <nav class="main-nav">
+      <a href="index.html">الرئيسية</a>
+      <a href="products.html" class="active">المنتجات</a>
+      <a href="profile.html">حسابي</a>
+      <a href="dashboard.html" class="btn btn-outline btn-sm">لوحة التحكم <i class="fa-solid fa-wand-magic-sparkles" style="font-size:11px;"></i> عرض</a>
+    </nav>
+    <div class="header-actions">
+      <button class="theme-toggle" title="الوضع الليلي"></button>
+      <a href="cart.html" class="icon-btn" aria-label="السلة">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6h15l-1.5 9h-12L6 6zm0 0L5 3H2"/><circle cx="9" cy="20" r="1.5"/><circle cx="17" cy="20" r="1.5"/></svg>
+        <span class="badge cart-badge">0</span>
+      </a>
+      <a href="auth.html" class="icon-btn" aria-label="تسجيل الدخول">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/></svg>
+      </a>
+      <button class="icon-btn mobile-toggle" aria-label="القائمة">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<section class="section" style="padding-top:48px;">
+  <div class="container">
+    <div class="section-head">
+      <div>
+        <div class="eyebrow">التشكيلة الكاملة</div>
+        <h2>كل المنتجات</h2>
+        <p class="muted">١٠ منتجات</p>
+      </div>
+      <select class="select-sort">
+        <option>ترتيب حسب: الأحدث</option>
+        <option>السعر: من الأقل للأعلى</option>
+        <option>السعر: من الأعلى للأقل</option>
+        <option>الأكثر مبيعًا</option>
+      </select>
+    </div>
+
+    <div class="filters-bar">
+      <div class="filters-left">
+        <button class="chip active" data-cat="all">الكل</button>
+        <button class="chip" data-cat="اسكرابات طبية">اسكرابات طبية</button>
+        <button class="chip" data-cat="بالطوهات طبية">بالطوهات طبية</button>
+        <button class="chip" data-cat="جواكت طبية">جواكت طبية</button>
+        <button class="chip" data-cat="هيدات طبية">هيدات طبية</button>
+        <button class="chip" data-cat="كورسات طبية">كورسات طبية</button>
+      </div>
+    </div>
+
+    <div class="grid-products" id="all-grid"></div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-bottom">
+      <span>© ٢٠٢٦ SCRUBIX. جميع الحقوق محفوظة.</span>
+      <span>نسخة ديمو — عرض تصميمي فقط</span>
+    </div>
+  </div>
+</footer>
+
+<script src="js/app.js"></script>
+<script>
+  const grid = document.getElementById('all-grid');
+  function draw(list){ grid.innerHTML = list.map(productCard).join(''); initScrollReveal(); }
+  draw(PRODUCTS);
+
+  document.querySelectorAll('.chip').forEach(chip=>{
+    chip.addEventListener('click', ()=>{
+      document.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));
+      chip.classList.add('active');
+      const cat = chip.dataset.cat;
+      draw(cat === 'all' ? PRODUCTS : PRODUCTS.filter(p=>p.cat===cat));
+    });
+  });
+</script>
+</body>
+</html>

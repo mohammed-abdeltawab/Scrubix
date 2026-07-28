@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SCRUBIX — السلة</title>
+<link rel="icon" href="img/logo.png">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="css/style.css">
+<style>
+  .cart-layout { display:grid; grid-template-columns: 1.8fr 1fr; gap:40px; align-items:start; }
+  @media (max-width:900px){ .cart-layout{grid-template-columns:1fr;} }
+  .cart-row { display:flex; gap:18px; padding:20px 0; border-bottom:1px solid var(--border); align-items:center; }
+  .cart-row img { width:88px; height:106px; object-fit:cover; border-radius:12px; }
+  .cart-row .qty-box { transform: scale(.9); }
+  .remove-btn { color: var(--danger); font-size:13px; font-weight:700; }
+  .summary-row { display:flex; justify-content:space-between; padding:10px 0; font-size:14px; }
+  .summary-row.total { font-size:18px; font-weight:800; border-top:1px solid var(--border); margin-top:10px; padding-top:16px; }
+  .coupon-box { display:flex; gap:8px; margin:20px 0; }
+  .coupon-box input { flex:1; }
+  .empty-cart { text-align:center; padding:80px 0; }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container header-inner">
+    <a href="index.html" class="logo brand-logo"><img src="img/logo.png" alt="SCRUBIX" class="brand-mark">SCRUBIX</a>
+    <nav class="main-nav">
+      <a href="index.html">الرئيسية</a>
+      <a href="products.html">المنتجات</a>
+      <a href="profile.html">حسابي</a>
+      <a href="dashboard.html" class="btn btn-outline btn-sm">لوحة التحكم <i class="fa-solid fa-wand-magic-sparkles" style="font-size:11px;"></i> عرض</a>
+    </nav>
+    <div class="header-actions">
+      <button class="theme-toggle" title="الوضع الليلي"></button>
+      <a href="cart.html" class="icon-btn active" aria-label="السلة">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6h15l-1.5 9h-12L6 6zm0 0L5 3H2"/><circle cx="9" cy="20" r="1.5"/><circle cx="17" cy="20" r="1.5"/></svg>
+        <span class="badge cart-badge">0</span>
+      </a>
+      <a href="auth.html" class="icon-btn" aria-label="تسجيل الدخول">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/></svg>
+      </a>
+    </div>
+  </div>
+</header>
+
+<section class="section" style="padding-top:48px;">
+  <div class="container">
+    <h2 style="margin-bottom:36px;">سلة التسوق</h2>
+    <div class="cart-layout" id="cart-layout">
+      <!-- filled by JS -->
+    </div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-bottom">
+      <span>© ٢٠٢٦ SCRUBIX. جميع الحقوق محفوظة.</span>
+      <span>نسخة ديمو — عرض تصميمي فقط</span>
+    </div>
+  </div>
+</footer>
+
+<script src="js/app.js"></script>
+<script>
+  const layout = document.getElementById('cart-layout');
+
+  function draw() {
+    const items = window.__cart.map(ci => ({...PRODUCTS.find(p=>p.id===ci.id), qty: ci.qty}));
+    if (items.length === 0) {
+      layout.innerHTML = `<div class="empty-cart" style="grid-column:1/-1;">
+        <h3>السلة فارغة</h3>
+        <p class="muted mt-16">لسه ما ضفتش أي منتج. تصفح التشكيلة وابدأ التسوق.</p>
+        <a href="products.html" class="btn btn-primary mt-24">تصفح المنتجات</a>
+      </div>`;
+      return;
+    }
+
+    const subtotal = items.reduce((s,i)=> s + i.price*i.qty, 0);
+    const shipping = subtotal > 1500 ? 0 : 60;
+    const total = subtotal + shipping;
+
+    layout.innerHTML = `
+      <div class="card">
+        ${items.map(i=>`
+          <div class="cart-row" data-id="${i.id}">
+            <img src="${i.img}" alt="${i.name}">
+            <div style="flex:1;">
+              <div class="product-title">${i.name}</div>
+              <div class="product-cat">${i.cat} · مقاس M</div>
+              <div class="qty-box mt-8">
+                <button onclick="updateQty(${i.id}, -1)">−</button>
+                <span>${i.qty}</span>
+                <button onclick="updateQty(${i.id}, 1)">+</button>
+              </div>
+            </div>
+            <div style="text-align:left;">
+              <div class="product-price">${i.price * i.qty} ج.م</div>
+              <button class="remove-btn mt-16" onclick="removeItem(${i.id})">إزالة</button>
+            </div>
+          </div>`).join('')}
+      </div>
+      <div class="card">
+        <h3 style="font-size:18px;">ملخص الطلب</h3>
+        <div class="coupon-box">
+          <input type="text" placeholder="كود الخصم">
+          <button class="btn btn-outline btn-sm" onclick="showToast('تم تطبيق الكود')">تطبيق</button>
+        </div>
+        <div class="summary-row"><span class="muted">المجموع الفرعي</span><span>${subtotal} ج.م</span></div>
+        <div class="summary-row"><span class="muted">الشحن</span><span>${shipping === 0 ? 'مجاني' : shipping + ' ج.م'}</span></div>
+        <div class="summary-row total"><span>الإجمالي</span><span>${total} ج.م</span></div>
+        <a href="checkout.html" class="btn btn-primary btn-block mt-24">إتمام الطلب</a>
+      </div>
+    `;
+  }
+
+  function updateQty(id, d) {
+    const item = window.__cart.find(i=>i.id===id);
+    item.qty = Math.max(1, item.qty + d);
+    renderCartBadge(); draw();
+  }
+  function removeItem(id) {
+    window.__cart = window.__cart.filter(i=>i.id!==id);
+    renderCartBadge(); draw();
+    showToast('تمت إزالة المنتج');
+  }
+
+  draw();
+</script>
+</body>
+</html>

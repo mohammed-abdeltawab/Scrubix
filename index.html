@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SCRUBIX — الصفحة الرئيسية</title>
+<link rel="icon" href="img/logo.png">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container header-inner">
+    <a href="index.html" class="logo brand-logo"><img src="img/logo.png" alt="SCRUBIX" class="brand-mark">SCRUBIX</a>
+    <nav class="main-nav">
+      <a href="index.html" class="active">الرئيسية</a>
+      <a href="products.html">المنتجات</a>
+      <a href="profile.html">حسابي</a>
+      <a href="dashboard.html" class="btn btn-outline btn-sm">لوحة التحكم <i class="fa-solid fa-wand-magic-sparkles" style="font-size:11px;"></i> عرض</a>
+    </nav>
+    <div class="header-actions">
+      <button class="theme-toggle" title="الوضع الليلي"></button>
+      <a href="cart.html" class="icon-btn" aria-label="السلة">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6h15l-1.5 9h-12L6 6zm0 0L5 3H2"/><circle cx="9" cy="20" r="1.5"/><circle cx="17" cy="20" r="1.5"/></svg>
+        <span class="badge cart-badge">0</span>
+      </a>
+      <a href="auth.html" class="icon-btn" aria-label="تسجيل الدخول">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/></svg>
+      </a>
+      <button class="icon-btn mobile-toggle" aria-label="القائمة">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="container hero-grid">
+    <div>
+      <div class="hero-eyebrow">تشكيلة يونيفورم طبي ٢٠٢٦</div>
+      <h1>يونيفورم طبي يُصمم ليريحك<br>في كل نوبتجية</h1>
+      <p class="muted">اسكرابات وبالطوهات وجواكت وهيدات وكورسات طبية من أقمشة مريحة ومقاومة — تصميم عملي، جودة تتحمل الاستخدام اليومي.</p>
+      <div class="hero-actions">
+        <a href="products.html" class="btn btn-primary">تسوّق التشكيلة</a>
+        <a href="products.html" class="btn btn-ghost">استكشف الأصناف ←</a>
+      </div>
+    </div>
+    <div class="hero-image-wrap">
+      <img src="https://images.unsplash.com/photo-1761234852472-85aeea9c3eac?w=900&q=80" alt="تشكيلة SCRUBIX الطبية">
+      <div class="hero-tag"><span class="dot"></span> ١٢٤ عميل يتصفحون الآن</div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="section-head">
+      <div>
+        <div class="eyebrow">مختارات المحرر</div>
+        <h2>المنتجات المميزة</h2>
+      </div>
+      <a href="products.html" class="btn btn-outline btn-sm">عرض الكل</a>
+    </div>
+    <div class="grid-products" id="featured-grid"></div>
+  </div>
+</section>
+
+<section class="section" style="background:var(--bg-elevated); border-top:1px solid var(--border); border-bottom:1px solid var(--border);">
+  <div class="container" style="display:grid; grid-template-columns:repeat(3,1fr); gap:32px; text-align:center;">
+    <div data-animate>
+      <h3 style="font-size:32px;">٤٨ ساعة</h3>
+      <p class="muted mt-8">توصيل سريع لكل المحافظات</p>
+    </div>
+    <div data-animate>
+      <h3 style="font-size:32px;">١٤ يوم</h3>
+      <p class="muted mt-8">استبدال واسترجاع مجاني</p>
+    </div>
+    <div data-animate>
+      <h3 style="font-size:32px;">١٠٠٪</h3>
+      <p class="muted mt-8">قماش طبي مضاد للبكتيريا مضمون</p>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="section-head">
+      <div>
+        <div class="eyebrow">وصل حديثًا</div>
+        <h2>أحدث الإضافات</h2>
+      </div>
+    </div>
+    <div class="grid-products" id="new-grid"></div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="logo mt-8 brand-logo"><img src="img/logo.png" alt="SCRUBIX" class="brand-mark">SCRUBIX</div>
+        <p class="muted mt-16">علامة يونيفورم طبي مصرية، جودة تناسب ساعات العمل الطويلة.</p>
+      </div>
+      <div>
+        <h4>تسوّق</h4>
+        <a href="products.html">كل المنتجات</a>
+        <a href="products.html">الأكثر مبيعًا</a>
+        <a href="products.html">وصل حديثًا</a>
+      </div>
+      <div>
+        <h4>الحساب</h4>
+        <a href="auth.html">تسجيل الدخول</a>
+        <a href="profile.html">طلباتي</a>
+        <a href="cart.html">السلة</a>
+      </div>
+      <div>
+        <h4>تواصل معنا</h4>
+        <a href="tel:+201000000000">01000000000</a>
+        <a href="mailto:hello@atelier.demo">hello@atelier.demo</a>
+        <a href="#">واتساب</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© ٢٠٢٦ SCRUBIX. جميع الحقوق محفوظة.</span>
+      <span>نسخة ديمو — عرض تصميمي فقط</span>
+    </div>
+  </div>
+</footer>
+
+<script src="js/app.js"></script>
+<script>
+  document.getElementById('featured-grid').innerHTML = PRODUCTS.slice(0,4).map(productCard).join('');
+  document.getElementById('new-grid').innerHTML = PRODUCTS.slice(4,8).map(productCard).join('');
+</script>
+</body>
+</html>

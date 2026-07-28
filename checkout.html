@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SCRUBIX — إتمام الطلب</title>
+<link rel="icon" href="img/logo.png">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="css/style.css">
+<style>
+  .checkout-layout { display:grid; grid-template-columns: 1.6fr 1fr; gap:40px; align-items:start; }
+  @media (max-width:900px){ .checkout-layout{grid-template-columns:1fr;} }
+  .steps { display:flex; gap:24px; margin-bottom:36px; }
+  .step { display:flex; align-items:center; gap:10px; font-size:14px; font-weight:700; color:var(--text-muted); }
+  .step .num { width:28px; height:28px; border-radius:50%; border:1.5px solid var(--border); display:flex; align-items:center; justify-content:center; font-size:13px; }
+  .step.active { color:var(--text); }
+  .step.active .num { background:var(--text); color:var(--bg); border-color:var(--text); }
+  .pay-opt { border:1.5px solid var(--border); border-radius:14px; padding:16px; display:flex; gap:14px; align-items:center; margin-bottom:12px; cursor:pointer; transition:.2s; }
+  .pay-opt.active { border-color: var(--accent); background: var(--accent-tint); }
+  .mini-item { display:flex; gap:12px; padding:10px 0; border-bottom:1px solid var(--border); align-items:center; }
+  .mini-item img { width:52px; height:64px; object-fit:cover; border-radius:8px; }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container header-inner">
+    <a href="index.html" class="logo brand-logo"><img src="img/logo.png" alt="SCRUBIX" class="brand-mark">SCRUBIX</a>
+    <nav class="main-nav"><a href="index.html">الرئيسية</a><a href="products.html">المنتجات</a></nav>
+    <div class="header-actions"><button class="theme-toggle"></button></div>
+  </div>
+</header>
+
+<section class="section" style="padding-top:44px;">
+  <div class="container">
+    <div class="steps">
+      <div class="step"><span class="num"><i class="fa-solid fa-check"></i></span> السلة</div>
+      <div class="step active"><span class="num">٢</span> بيانات الشحن والدفع</div>
+      <div class="step"><span class="num">٣</span> تأكيد الطلب</div>
+    </div>
+
+    <div class="checkout-layout">
+      <div>
+        <div class="card">
+          <h3 style="font-size:16px; margin-bottom:20px;">بيانات الشحن</h3>
+          <div class="field-row">
+            <div class="field"><label>الاسم بالكامل</label><input type="text" placeholder="مثال: أحمد محمود"></div>
+            <div class="field"><label>رقم الهاتف</label><input type="tel" placeholder="01xxxxxxxxx"></div>
+          </div>
+          <div class="field-row">
+            <div class="field"><label>المحافظة</label>
+              <select><option>القاهرة</option><option>الجيزة</option><option>الإسكندرية</option></select>
+            </div>
+            <div class="field"><label>المنطقة</label><input type="text" placeholder="اسم المنطقة"></div>
+          </div>
+          <div class="field"><label>العنوان بالتفصيل</label><input type="text" placeholder="اسم الشارع، رقم المبنى، الدور"></div>
+          <div class="field"><label>ملاحظات على الطلب (اختياري)</label><textarea rows="3" placeholder="مثال: التوصيل بعد الساعة ٥ مساءً"></textarea></div>
+        </div>
+
+        <div class="card mt-24">
+          <h3 style="font-size:16px; margin-bottom:20px;">طريقة الدفع</h3>
+          <div class="pay-opt active" onclick="selectPay(this)">
+            <input type="radio" name="pay" checked>
+            <div><strong>الدفع عند الاستلام</strong><div class="muted" style="font-size:13px;">ادفع نقدًا عند وصول الطلب</div></div>
+          </div>
+          <div class="pay-opt" onclick="selectPay(this)">
+            <input type="radio" name="pay">
+            <div><strong>InstaPay</strong><div class="muted" style="font-size:13px;">التحويل إلى 01000000000@instapay</div></div>
+          </div>
+          <div class="pay-opt" onclick="selectPay(this)">
+            <input type="radio" name="pay">
+            <div><strong>فودافون كاش</strong><div class="muted" style="font-size:13px;">التحويل إلى 010xxxxxxxx</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3 style="font-size:16px; margin-bottom:16px;">طلبك</h3>
+        <div id="mini-items"></div>
+        <div class="summary-row mt-16"><span class="muted">المجموع الفرعي</span><span id="c-sub">0 ج.م</span></div>
+        <div class="summary-row"><span class="muted">الشحن</span><span id="c-ship">0 ج.م</span></div>
+        <div class="summary-row total"><span>الإجمالي</span><span id="c-total">0 ج.م</span></div>
+        <button class="btn btn-primary btn-block mt-24" onclick="placeOrder()">تأكيد الطلب</button>
+        <p class="muted text-center mt-16" style="font-size:12px;">هذه نسخة عرض — لا يتم إرسال أي طلب حقيقي</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script src="js/app.js"></script>
+<script>
+  function selectPay(el){ document.querySelectorAll('.pay-opt').forEach(o=>o.classList.remove('active')); el.classList.add('active'); el.querySelector('input').checked = true; }
+
+  const items = window.__cart.map(ci => ({...PRODUCTS.find(p=>p.id===ci.id), qty: ci.qty}));
+  document.getElementById('mini-items').innerHTML = items.map(i=>`
+    <div class="mini-item"><img src="${i.img}"><div style="flex:1;"><div style="font-weight:700; font-size:14px;">${i.name}</div><div class="muted" style="font-size:12px;">الكمية: ${i.qty}</div></div><div style="font-weight:700;">${i.price*i.qty} ج.م</div></div>
+  `).join('');
+  const sub = items.reduce((s,i)=>s+i.price*i.qty,0);
+  const ship = sub > 1500 ? 0 : 60;
+  document.getElementById('c-sub').textContent = sub + ' ج.م';
+  document.getElementById('c-ship').textContent = (ship===0?'مجاني':ship+' ج.م');
+  document.getElementById('c-total').textContent = (sub+ship) + ' ج.م';
+
+  function placeOrder(){
+    document.querySelector('.checkout-layout').innerHTML = `
+      <div class="card text-center" style="grid-column:1/-1; padding:60px 30px;">
+        <div style="width:64px;height:64px;border-radius:50%;background:var(--success);color:#fff;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;font-size:24px;"><i class="fa-solid fa-check"></i></div>
+        <h2>تم استلام طلبك بنجاح</h2>
+        <p class="muted mt-16">رقم الطلب: <strong>ORD-100482</strong> — هتوصلك رسالة تأكيد قريبًا</p>
+        <a href="profile.html" class="btn btn-primary mt-24">متابعة الطلب</a>
+      </div>`;
+  }
+</script>
+</body>
+</html>
